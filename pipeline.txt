@@ -15,7 +15,7 @@ pipeline{
         }
         stage('Checkout from Git'){
             steps{
-                git branch: 'main', url: 'https://github.com/Aj7Ay/Netflix-clone.git'
+                git branch: 'main', url: 'https://github.com/Ramyadav08/DevSecOps-Project-NetFlix.git'
             }
         }
         stage("Sonarqube Analysis "){
@@ -53,9 +53,9 @@ pipeline{
             steps{
                 script{
                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){   
-                       sh "docker build --build-arg TMDB_V3_API_KEY=<yourtmdbapikey> -t netflix ."
-                       sh "docker tag netflix nasi101/netflix:latest "
-                       sh "docker push nasi101/netflix:latest "
+                       sh "docker build --build-arg TMDB_V3_API_KEY=457f6bc925ab67f00ececfa13eaa9846 -t netflix ."
+                       sh "docker tag netflix ramrekha08/netflix:latest "
+                       sh "docker push ramrekha08/netflix:latest "
                     }
                 }
             }
@@ -67,7 +67,7 @@ pipeline{
         }
         stage('Deploy to container'){
             steps{
-                sh 'docker run -d -p 8081:80 nasi101/netflix:latest'
+                sh 'docker run -d -p 8081:80 ramrekha08/netflix:latest'
             }
         }
         stage('Deploy to kubernets'){
@@ -84,15 +84,5 @@ pipeline{
         }
 
     }
-    post {
-     always {
-        emailext attachLog: true,
-            subject: "'${currentBuild.result}'",
-            body: "Project: ${env.JOB_NAME}<br/>" +
-                "Build Number: ${env.BUILD_NUMBER}<br/>" +
-                "URL: ${env.BUILD_URL}<br/>",
-            to: 'iambatmanthegoat@gmail.com',                                #change mail here
-            attachmentsPattern: 'trivyfs.txt,trivyimage.txt'
-        }
-    }
+    
 }
